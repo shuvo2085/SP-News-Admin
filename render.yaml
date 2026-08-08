@@ -1,0 +1,32 @@
+# Render Blueprint for the SP News admin + API (web service only).
+# Deploy: push this `web/` folder to GitHub, then in Render:
+#   New +  →  Blueprint  →  pick the repo. Render reads this file.
+# You will be prompted to fill DATABASE_URL and DIRECT_URL (from Supabase).
+services:
+  - type: web
+    name: sp-news-admin
+    runtime: node
+    plan: free
+    # Build installs ALL deps (incl. dev, needed by next build),
+    # runs DB migrations, seeds once (idempotent), then builds.
+    buildCommand: npm ci --include=dev && npm run render-build
+    startCommand: npm run start
+    healthCheckPath: /login
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL # Supabase pooled URL (port 6543, ?pgbouncer=true)
+        sync: false
+      - key: DIRECT_URL # Supabase direct URL (port 5432) — for migrations
+        sync: false
+      - key: JWT_SECRET # auto-generated strong secret for session cookies
+        generateValue: true
+      - key: SUPABASE_URL # https://<ref>.supabase.co  (for image uploads)
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY # Supabase service_role key (keep secret)
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: media
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
