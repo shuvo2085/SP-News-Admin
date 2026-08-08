@@ -8,7 +8,9 @@ export async function middleware(req: NextRequest) {
 
   const isApi = pathname.startsWith("/api");
   const isPublicApi =
-    pathname.startsWith("/api/public") || pathname.startsWith("/api/auth");
+    pathname.startsWith("/api/public") ||
+    pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/api/health");
 
   // Let public + auth APIs through untouched.
   if (isApi && isPublicApi) return NextResponse.next();
