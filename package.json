@@ -11,7 +11,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:migrate": "prisma migrate deploy",
-    "render-build": "prisma migrate deploy && prisma db seed && next build"
+    "render-build": "next build"
   },
   "engines": {
     "node": ">=20"
